@@ -74,6 +74,13 @@ export const useCustomWidthAtom = atomWithStorage<boolean>(
   false,
 );
 
+export const longestEdgeAtom = atomWithStorage<number>("longestEdge", 0);
+
+export const useLongestEdgeAtom = atomWithStorage<boolean>(
+  "useLongestEdge",
+  false,
+);
+
 export const tileSizeAtom = atomWithStorage<number | null>("tileSize", null);
 
 // CLIENT SIDE ONLY

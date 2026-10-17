@@ -17,6 +17,7 @@ import { FEATURE_FLAGS } from "@common/feature-flags";
 import TurnOffNotificationsToggle from "./turn-off-notifications-toggle";
 import { cn } from "@/lib/utils";
 import { InputCustomResolution } from "./input-custom-resolution";
+import { InputLongestEdge } from "./input-longest-edge";
 import { InputTileSize } from "./input-tile-size";
 import LanguageSwitcher from "./language-switcher";
 import { translationAtom } from "@/atoms/translations-atom";
@@ -190,6 +191,8 @@ function SettingsTab({
       <SelectImageScale scale={scale} setScale={setScale} />
 
       <InputCustomResolution />
+
+      <InputLongestEdge />
 
       <InputCompression
         compression={compression}

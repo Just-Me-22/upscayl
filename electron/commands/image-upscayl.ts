@@ -22,6 +22,7 @@ import getDirectoryFromPath from "../../common/get-directory-from-path";
 import { MODELS } from "../../common/models-list";
 import { getPlatform } from "../utils/get-device-specs";
 import { copyMetadata } from "../utils/copy-metadata";
+import { resizeToLongestEdge } from "../utils/resize-to-longest-edge";
 
 const imageUpscayl = async (event, payload: ImageUpscaylPayload) => {
   const mainWindow = getMainWindow();
@@ -36,7 +37,9 @@ const imageUpscayl = async (event, payload: ImageUpscaylPayload) => {
   const compression = payload.compression;
   const ttaMode = payload.ttaMode;
   const scale = payload.scale;
-  const useCustomWidth = payload.useCustomWidth;
+  const useLongestEdge = payload.useLongestEdge;
+  const longestEdge = useLongestEdge ? parseInt(payload.longestEdge) : 0;
+  const useCustomWidth = payload.useCustomWidth && !useLongestEdge;
   const customWidth = useCustomWidth ? payload.customWidth : "";
   const model = payload.model as string;
   const gpuId = payload.gpuId as string;
@@ -53,7 +56,11 @@ const imageUpscayl = async (event, payload: ImageUpscaylPayload) => {
     slash +
     fileName +
     "_upscayl_" +
-    (useCustomWidth ? `${customWidth}px_` : `${scale}x_`) +
+    (useLongestEdge
+      ? `${longestEdge}le_`
+      : useCustomWidth
+        ? `${customWidth}px_`
+        : `${scale}x_`) +
     model +
     "." +
     saveImageAs;
@@ -158,6 +165,14 @@ const imageUpscayl = async (event, payload: ImageUpscaylPayload) => {
         // Free up memory
         upscayl.kill();
         mainWindow.setProgressBar(-1);
+        if (useLongestEdge && longestEdge > 0) {
+          mainWindow.webContents.send(ELECTRON_COMMANDS.SCALING_AND_CONVERTING);
+          try {
+            await resizeToLongestEdge(outFile, longestEdge);
+          } catch (error) {
+            logit("❌ Error resizing to longest edge: ", error);
+          }
+        }
         if (payload.copyMetadata) {
           logit("🏷️ Copying metadata...");
           try {

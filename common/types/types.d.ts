@@ -12,6 +12,8 @@ export type ImageUpscaylPayload = {
   noImageProcessing: boolean;
   customWidth: string;
   useCustomWidth: boolean;
+  longestEdge: string;
+  useLongestEdge: boolean;
   tileSize: number;
   ttaMode: boolean;
   copyMetadata: boolean;
@@ -31,6 +33,8 @@ export type DoubleUpscaylPayload = {
   noImageProcessing: boolean;
   customWidth: string;
   useCustomWidth: boolean;
+  longestEdge: string;
+  useLongestEdge: boolean;
   tileSize: number;
   ttaMode: boolean;
   copyMetadata: boolean;
@@ -47,6 +51,8 @@ export type BatchUpscaylPayload = {
   noImageProcessing: boolean;
   customWidth: string;
   useCustomWidth: boolean;
+  longestEdge: string;
+  useLongestEdge: boolean;
   tileSize: number;
   ttaMode: boolean;
   copyMetadata: boolean;

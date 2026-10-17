@@ -12,6 +12,8 @@ import {
   scaleAtom,
   customWidthAtom,
   useCustomWidthAtom,
+  longestEdgeAtom,
+  useLongestEdgeAtom,
   tileSizeAtom,
   showSidebarAtom,
   selectedModelIdAtom,
@@ -90,6 +92,8 @@ const Sidebar = ({
   const noImageProcessing = useAtomValue(noImageProcessingAtom);
   const customWidth = useAtomValue(customWidthAtom);
   const useCustomWidth = useAtomValue(useCustomWidthAtom);
+  const longestEdge = useAtomValue(longestEdgeAtom);
+  const useLongestEdge = useAtomValue(useLongestEdgeAtom);
   const tileSize = useAtomValue(tileSizeAtom);
   const [showSidebar, setShowSidebar] = useAtom(showSidebarAtom);
   const setUserStats = useSetAtom(userStatsAtom);
@@ -117,6 +121,8 @@ const Sidebar = ({
             compression: compression.toString(),
             customWidth: customWidth > 0 ? customWidth.toString() : null,
             useCustomWidth,
+            longestEdge: longestEdge > 0 ? longestEdge.toString() : null,
+            useLongestEdge,
             tileSize,
             ttaMode,
             copyMetadata,
@@ -146,6 +152,8 @@ const Sidebar = ({
             compression: compression.toString(),
             customWidth: customWidth > 0 ? customWidth.toString() : null,
             useCustomWidth,
+            longestEdge: longestEdge > 0 ? longestEdge.toString() : null,
+            useLongestEdge,
             tileSize,
             ttaMode,
             copyMetadata,
@@ -172,6 +180,8 @@ const Sidebar = ({
           compression: compression.toString(),
           customWidth: customWidth > 0 ? customWidth.toString() : null,
           useCustomWidth,
+          longestEdge: longestEdge > 0 ? longestEdge.toString() : null,
+          useLongestEdge,
           tileSize,
           ttaMode,
           copyMetadata,

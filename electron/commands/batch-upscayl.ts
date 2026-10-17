@@ -16,6 +16,7 @@ import { BatchUpscaylPayload } from "../../common/types/types";
 import showNotification from "../utils/show-notification";
 import { MODELS } from "../../common/models-list";
 import { copyMetadata } from "../utils/copy-metadata";
+import { resizeFolderToLongestEdge } from "../utils/resize-to-longest-edge";
 
 const batchUpscayl = async (event, payload: BatchUpscaylPayload) => {
   const mainWindow = getMainWindow();
@@ -25,7 +26,9 @@ const batchUpscayl = async (event, payload: BatchUpscaylPayload) => {
   const compression = payload.compression;
   const ttaMode = payload.ttaMode;
   const scale = payload.scale;
-  const useCustomWidth = payload.useCustomWidth;
+  const useLongestEdge = payload.useLongestEdge;
+  const longestEdge = useLongestEdge ? parseInt(payload.longestEdge) : 0;
+  const useCustomWidth = payload.useCustomWidth && !useLongestEdge;
   const customWidth = useCustomWidth ? payload.customWidth : "";
   const model = payload.model;
   const gpuId = payload.gpuId;
@@ -35,7 +38,11 @@ const batchUpscayl = async (event, payload: BatchUpscaylPayload) => {
   // GET THE OUTPUT DIRECTORY
   let outputFolderPath = decodeURIComponent(payload.outputPath);
   const outputFolderName = `upscayl_${saveImageAs}_${model}_${
-    useCustomWidth ? `${customWidth}px` : `${scale}x`
+    useLongestEdge
+      ? `${longestEdge}le`
+      : useCustomWidth
+        ? `${customWidth}px`
+        : `${scale}x`
   }`;
   outputFolderPath += slash + outputFolderName;
   // CREATE THE OUTPUT DIRECTORY
@@ -110,6 +117,14 @@ const batchUpscayl = async (event, payload: BatchUpscaylPayload) => {
     if (!failed && !stopped) {
       logit("💯 Done upscaling");
       upscayl.kill();
+      if (useLongestEdge && longestEdge > 0) {
+        mainWindow.webContents.send(ELECTRON_COMMANDS.SCALING_AND_CONVERTING);
+        try {
+          await resizeFolderToLongestEdge(outputFolderPath, longestEdge);
+        } catch (error) {
+          logit("❌ Error resizing batch to longest edge: ", error);
+        }
+      }
       if (payload.copyMetadata) {
         logit("🏷️ Copying metadata...");
         try {
