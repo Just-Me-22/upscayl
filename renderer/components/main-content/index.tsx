@@ -136,7 +136,7 @@ const MainContent = ({
       return;
     }
     const type = e.dataTransfer.items[0].type;
-    const filePath = e.dataTransfer.files[0].path;
+    const filePath = window.electron.getPathForFile(e.dataTransfer.files[0]);
     const extension = e.dataTransfer.files[0].name.split(".").at(-1);
     logit("⤵️ Dropped file: ", JSON.stringify({ type, filePath, extension }));
     if (
